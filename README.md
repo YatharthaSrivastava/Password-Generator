@@ -41,11 +41,11 @@ Simply open `main.html` in any modern web browser.
 ## 🛠️ Project Structure
 
 ```
-├── main.html        # Application markup with modern vector icons
-├── style1.css       # Responsive styling, glassmorphism design, and dark theme
-├── script.js        # Generation logic, Fisher-Yates shuffle, UI events, and history
-├── .gitignore       # Git ignore rules for system and editor files
-└── README.md        # Documentation and project overview
+├── index.html        # Application markup with modern vector icons
+├── style.css         # Responsive styling, glassmorphism design, and dark theme
+├── script.js         # Generation logic, Fisher-Yates shuffle, UI events, and history
+├── .gitignore        # Git ignore rules for system and editor files
+└── README.md         # Documentation and project overview
 ```
 
 ---
