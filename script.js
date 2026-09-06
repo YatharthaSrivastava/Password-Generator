@@ -48,21 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
         sun: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`
     };
 
-    function getSecureRandomInt(max) {
-        if (max <= 0) return 0;
-        const array = new Uint32Array(1);
-        window.crypto.getRandomValues(array);
-        return array[0] % max;
+    // Helper to get a random integer from 0 up to (max - 1)
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = getSecureRandomInt(i + 1);
-            [array[i], array[j]] = [array[j], array[i]];
+    // Standard Fisher-Yates shuffle using a temporary variable
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = getRandomInt(i + 1);
+            let temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
         }
-        return array;
+        return arr;
     }
 
+    // Generate a random password based on user choices
     function generatePassword(saveToHistory = true) {
         const length = parseInt(lengthSlider.value, 10);
         const includeUpper = uppercaseCheckbox.checked;
@@ -84,58 +86,59 @@ document.addEventListener('DOMContentLoaded', () => {
             return str.split('').filter(char => !AMBIGUOUS_CHARS.has(char)).join('');
         }
 
+        // Add character sets and guarantee at least one character from each
         if (includeUpper) {
             const set = filterAmbiguous(CHAR_SETS.uppercase);
             if (set.length > 0) {
                 charPool += set;
-                guaranteedChars.push(set[getSecureRandomInt(set.length)]);
+                guaranteedChars.push(set[getRandomInt(set.length)]);
             }
         }
         if (includeLower) {
             const set = filterAmbiguous(CHAR_SETS.lowercase);
             if (set.length > 0) {
                 charPool += set;
-                guaranteedChars.push(set[getSecureRandomInt(set.length)]);
+                guaranteedChars.push(set[getRandomInt(set.length)]);
             }
         }
         if (includeNumbers) {
             const set = filterAmbiguous(CHAR_SETS.numbers);
             if (set.length > 0) {
                 charPool += set;
-                guaranteedChars.push(set[getSecureRandomInt(set.length)]);
+                guaranteedChars.push(set[getRandomInt(set.length)]);
             }
         }
         if (includeSymbols) {
             const set = filterAmbiguous(CHAR_SETS.symbols);
             if (set.length > 0) {
                 charPool += set;
-                guaranteedChars.push(set[getSecureRandomInt(set.length)]);
+                guaranteedChars.push(set[getRandomInt(set.length)]);
             }
         }
 
-        // Fallback in edge cases
+        // Fallback in case pool is empty
         if (charPool.length === 0) {
             charPool = 'abcdefghjkmnpqrstuvwxyz23456789';
         }
 
         const passwordChars = [...guaranteedChars];
 
-        // Fill remaining length
+        // Fill remaining length with random characters from the pool
         while (passwordChars.length < length) {
-            const randChar = charPool[getSecureRandomInt(charPool.length)];
+            const randChar = charPool[getRandomInt(charPool.length)];
             passwordChars.push(randChar);
         }
 
-        // Shuffle so guaranteed chars are not always at the beginning
+        // Shuffle the characters so guaranteed characters aren't all at the start
         const finalPassword = shuffleArray(passwordChars).slice(0, length).join('');
 
-        // Update UI
+        // Update UI display
         passwordDisplay.value = finalPassword;
 
         // Evaluate and update strength and entropy
         updateStrengthAndEntropy(finalPassword, charPool.length);
 
-        // Add to history
+        // Add to history if requested
         if (saveToHistory && finalPassword) {
             addToHistory(finalPassword);
         }
