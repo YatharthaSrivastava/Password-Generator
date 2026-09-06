@@ -8,7 +8,7 @@ A sleek, modern, and customizable password generator web application built with 
 
 - **🎲 Customizable Random Generation**: Generates randomized passwords across configurable character pools (Uppercase, Lowercase, Numbers, and Symbols).
 - **🔀 Fisher-Yates Shuffle Algorithm**: Ensures unbiased character distribution and guarantees at least one character from each selected category.
-- **📊 Shannon Entropy & Strength Analyzer**: Dynamically calculates entropy bits ($H = L \cdot \log_2(N)$) with color-coded strength meters.
+- **📊 Shannon Entropy & Strength Analyzer**: Dynamically calculates entropy bits with color-coded strength meters.
 - **⚡ Quick Presets**:
   - **Basic**: 10 characters (Letters + Numbers)
   - **Strong**: 16 characters (Letters + Numbers + Symbols)
